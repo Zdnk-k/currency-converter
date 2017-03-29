@@ -6,7 +6,7 @@ Currency-converter written in Python 3. Uses data from http://fixer.io.
 - --input_currency - input currency - 3 letters name or currency symbol
 - --output_currency - requested/output currency - 3 letters name or currency symbol (optional)
 
-If `<--output_currency>` is missing, input_currency is converted to all available currencies
+If `--output_currency` is missing, input_currency is converted to all available currencies
 
 ## available currencies
 32 currencies are supported.
