@@ -15,7 +15,7 @@ AUD, BGN, BRL, CAD, CHF, CNY, CZK, DKK, GBP, HKD, HRK, HUF, IDR, ILS, INR, JPY, 
 
 ### currency symbols
 Since some currencies use the same symbol, not all available currencies are accessible by their symbol.
-$ symbol is used for USD, $C for CAD, $A for AUD etc. kr is used only for NOK, ¥ only for CNY.
+$ symbol is used for USD, C$ for CAD, A$ for AUD etc. kr is used only for NOK, ¥ only for CNY.
 
 #### available currency symbols
 €, A$, лв, R$, C$, Fr., ¥, Kč, £, HK$, kn, Ft, Rp, ₪, ₹, ₩, Mex$, RM, kr, NZ$, ₱, zł, L,₽, S$, ฿, ₺, $, R
