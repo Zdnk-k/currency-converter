@@ -18,7 +18,6 @@ CURRENCY_SYMBOLS = {"EUR":"€", "AUD":"A$", "BGN":"лв", "BRL":"R$", "CAD":"C$
                     "SGD":"S$", "THB":"฿", "TRY":"₺", "USD":"$", "ZAR":"R"
                     }
 
-
 # prepared output format
 OUTPUT_DICT = {
                 'input':{
@@ -31,7 +30,6 @@ OUTPUT_DICT = {
             }
 
 
-
 def is_available_code(code):
     """Checks if given currency code is available"""
     return code in AVAILABLE_CURRENCIES
@@ -41,11 +39,13 @@ def is_available_symbol(symbol):
     """check if given symbol is available"""
     return symbol in CURRENCY_SYMBOLS.values()
 
+
 def retrieve_symb_code(symbol):
     """retrieves symbols country code"""
     for c, s in CURRENCY_SYMBOLS.items():
         if symbol == s:
             return c
+
 
 def currency_type(string):
     """represents currency type for correct input check.
@@ -71,6 +71,7 @@ def convert(amount, in_curr, out_curr):
         for curr, rate in rates.items():
             OUTPUT_DICT['output'][curr] = format(amount * float(rate), '.2f')
 
+
 def get_rates(in_curr, out_curr):
     """ Rretrieve conversion rates for given input and output currency"""
     try:
@@ -85,9 +86,11 @@ def get_rates(in_curr, out_curr):
         print(err)
         sys.exit()
 
+
 def print_output():
     """prints output in json format"""
     print(json.dumps(OUTPUT_DICT, indent=4))
+
 
 def main():
     # program arguments
@@ -104,8 +107,7 @@ def main():
     # parse arguments   
     args = parser.parse_args()
 
-   
-    
+
     OUTPUT_DICT['input']['amount'] = args.amount    # assign amount value to output
     OUTPUT_DICT['input']['currency'] = args.input_currency  # assign currency code to output
     # convert 
