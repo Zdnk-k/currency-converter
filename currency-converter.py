@@ -2,7 +2,7 @@ import requests
 import json
 import argparse
 import sys
-from forex_python import CurrencyCodes, CurrencyConverter
+# from forex_python import CurrencyCodes, CurrencyConverter
 
 
 AVAILABLE_CURRENCIES = ["EUR", "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "GBP",                             "HKD","HRK", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR",                              "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY",                             "USD", "ZAR"
@@ -23,14 +23,14 @@ CURRENCY_SYMBOLS = {
  "Rp":"IDR", 
  "\u20aa":"ILS", 
  "\u20b9":"INR", 
- "\u20a9":KRW", 
+ "\u20a9":"KRW", 
  "Mex$":"MXN", 
  "RM":"MYR",                              
  "kr":"NOK", 
  "NZ$":"NZD", 
  "\u20b1":"PHP", 
  "z\u0142":"PLN", 
- "L":RON",
+ "L":"RON",
  "\u20bd":"RUB", 
  "S$":"SGD", 
  "\u0e3f":"THB", 
@@ -41,8 +41,8 @@ CURRENCY_SYMBOLS = {
 
 OUTPUT_DIR = {
                 'input':{
-                    'amount': , 
-                    'currency': 
+                    'amount': 0,
+                    'currency': ''
                 },
                 'output':{
 
@@ -59,9 +59,9 @@ def is_available_currency(code):
 def currency_type(string):
     if not is_available_symbol(string):
         if is_available_code(string):
-            return string
-        elif     
+            return string  
     else:
+        pass
 
 
 
@@ -85,3 +85,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+    for k in CURRENCY_SYMBOLS.keys():
+        print(k + ', ', end='')
