@@ -2,43 +2,46 @@ import requests
 import json
 import argparse
 import sys
-# from forex_python import CurrencyCodes, CurrencyConverter
 
-
+# dictionary of countries
 AVAILABLE_CURRENCIES = ["EUR", "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "GBP",                             "HKD","HRK", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR",                              "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY",                             "USD", "ZAR"
                         ]
-CURRENCY_SYMBOLS = { 
-"€":"EUR",
-"A$":"AUD",
-"лв":"BGN", 
- "R$":"BRL", 
- "C$":"CAD", 
- "Fr.":"CHF", 
- "\u00a5":"CNY", 
- "K\u010d":"CZK", 
- "\u00a3":"GBP",                          
- "HK$":"HKD",
- "kn":"HRK", 
- "Ft":"HUF", 
- "Rp":"IDR", 
- "\u20aa":"ILS", 
- "\u20b9":"INR", 
- "\u20a9":"KRW", 
- "Mex$":"MXN", 
- "RM":"MYR",                              
- "kr":"NOK", 
- "NZ$":"NZD", 
- "\u20b1":"PHP", 
- "z\u0142":"PLN", 
- "L":"RON",
- "\u20bd":"RUB", 
- "S$":"SGD", 
- "\u0e3f":"THB", 
- "\u20ba":"TRY",                          
- "$":"USD", 
- "R":"ZAR"
-}
 
+# dictionary of symbols
+CURRENCY_SYMBOLS = { 
+                        "EUR":"€",
+                        "AUD":"A$",
+                        "BGN":"лв",
+                        "BRL":"R$",
+                        "CAD":"C$",
+                        "CHF":"Fr.",
+                        "CNY":"¥",
+                        "CZK":"Kč",
+                        "GBP":"£",
+                        "HKD":"HK$",
+                        "HRK":"kn",
+                        "HUF":"Ft",
+                        "IDR":"Rp",
+                        "ILS":"₪",
+                        "INR":"₹",
+                        "KRW":"₩",
+                        "MXN":"Mex$",
+                        "MYR":"RM",
+                        "NOK":"kr",
+                        "NZD":"NZ$",
+                        "PHP":"₱",
+                        "PLN":"zł",
+                        "RON":"L",
+                        "RUB":"₽",
+                        "SGD":"S$",
+                        "THB":"฿",
+                        "TRY":"₺",
+                        "USD":"$",
+                        "ZAR":"R"
+                    }
+
+
+# prepared output format
 OUTPUT_DIR = {
                 'input':{
                     'amount': 0,
@@ -51,40 +54,90 @@ OUTPUT_DIR = {
 
 
 
-def is_available_currency(code):
+def is_available_code(code):
     """Checks if given currency code is available"""
     return code in AVAILABLE_CURRENCIES
 
 
+def is_available_symbol(symbol):
+    """check if given symbol is available"""
+    return symbol in CURRENCY_SYMBOLS.values()
+
+def retrieve_symb_code(symbol):
+    """retreives symbols country code"""
+    for c, s in CURRENCY_SYMBOLS.items():
+        if symbol == s:
+            return c
+
 def currency_type(string):
-    if not is_available_symbol(string):
-        if is_available_code(string):
-            return string  
+    """represents currency type for correct input check.
+        if passed argumunet is a available symbol, replaces it by code
+    """
+    if is_available_code(string):
+       return string
     else:
-        pass
+        if is_available_symbol(string):
+           return retrieve_symb_code(string)
+        else:
+           raise argparse.ArgumentTypeError("Unknown currency code/symbol")
 
 
+def convert(amount, in_curr, out_curr):
+    """converts given amount of money 
+        from input currency to output currency
+    """
+    if in_curr == out_curr:
+        OUTPUT_DIR['output'][in_curr] = format(amount, '.2f')
+    else:
+        rates = get_rates(in_curr, out_curr)
+        for curr, rate in rates.items():
+            OUTPUT_DIR['output'][curr] = format(amount * float(rate), '.2f')
 
-def convert(amount, input, output):
-    pass
+def get_rates(in_curr, out_curr):
+    try:
+        if out_curr == None:
+            r = requests.get("http://api.fixer.io/latest?base={}".format(in_curr))
+        else:
+            r = requests.get("http://api.fixer.io/latest?base={}&symbols={}".format(in_curr, out_curr))
+        r.raise_for_status()
+        rates = json.loads(r.text)['rates']
+        return rates
+    except requests.exceptions.RequestException as err:
+        print(err)
+        sys.exit()
 
+def print_output():
+    print(json.dumps(OUTPUT_DIR, indent=4))
 
 def main():
     # program arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--amount", "-a", help="The amount of money to be converted",  type=float)  # amount argument
-    parser.add_argument("--input_currency", "-i",  help="The currency to convert from", type=currency_type)  # input_currency argument
-    parser.add_argument("--output_currency", "-o", help="The currency to convert to", type=currency_type, required=False)   # output currency argument (optional)
+    # amount argument
+    parser.add_argument("--amount", "-a", help="The amount of money to be converted",\
+                            type=float, required=True)  
+    # input_currency argument
+    parser.add_argument("--input_currency", "-i",  help="The currency to convert from", \
+                            type=currency_type, required=True)  
+    # output currency argument (optional)
+    parser.add_argument("--output_currency", "-o", help="The currency to convert to",\
+                            type=currency_type, required=False)
+    # parse arguments   
     args = parser.parse_args()
 
-
-
-
-
+   
+    
+    OUTPUT_DIR['input']['amount'] = args.amount
+    OUTPUT_DIR['input']['currency'] = args.input_currency
+    convert(args.amount, args.input_currency, args.output_currency)
+    print_output()
 
 
 if __name__ == "__main__":
     main()
-    
-    for k in CURRENCY_SYMBOLS.keys():
-        print(k + ', ', end='')
+
+
+
+
+
+
+
