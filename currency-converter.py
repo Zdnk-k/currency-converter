@@ -3,40 +3,19 @@ import json
 import argparse
 import sys
 
-# list of countries
-AVAILABLE_CURRENCIES = ["EUR", "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "GBP", "HKD","HRK", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR",                                          "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR"
+# list of available countries
+AVAILABLE_CURRENCIES = ["EUR", "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK",\
+                        "GBP", "HKD","HRK", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", \
+                        "MXN", "MYR", "NOK", "NZD", "PHP", "PLN", "RON", "RUB", "SEK", \
+                        "SGD", "THB", "TRY", "USD", "ZAR"
                         ]
 
 # dictionary of symbols
-CURRENCY_SYMBOLS = {    "EUR":"€",
-                        "AUD":"A$",
-                        "BGN":"лв",
-                        "BRL":"R$",
-                        "CAD":"C$",
-                        "CHF":"Fr.",
-                        "CNY":"¥",
-                        "CZK":"Kč",
-                        "GBP":"£",
-                        "HKD":"HK$",
-                        "HRK":"kn",
-                        "HUF":"Ft",
-                        "IDR":"Rp",
-                        "ILS":"₪",
-                        "INR":"₹",
-                        "KRW":"₩",
-                        "MXN":"Mex$",
-                        "MYR":"RM",
-                        "NOK":"kr",
-                        "NZD":"NZ$",
-                        "PHP":"₱",
-                        "PLN":"zł",
-                        "RON":"L",
-                        "RUB":"₽",
-                        "SGD":"S$",
-                        "THB":"฿",
-                        "TRY":"₺",
-                        "USD":"$",
-                        "ZAR":"R"
+CURRENCY_SYMBOLS = {"EUR":"€", "AUD":"A$", "BGN":"лв", "BRL":"R$", "CAD":"C$", "CHF":"Fr.",\
+                    "CNY":"¥", "CZK":"Kč", "GBP":"£", "HKD":"HK$", "HRK":"kn", "HUF":"Ft", \
+                    "IDR":"Rp", "ILS":"₪", "INR":"₹", "KRW":"₩", "MXN":"Mex$", "MYR":"RM", \
+                    "NOK":"kr", "NZD":"NZ$", "PHP":"₱", "PLN":"zł", "RON":"L", "RUB":"₽", \
+                    "SGD":"S$", "THB":"฿", "TRY":"₺", "USD":"$", "ZAR":"R"
                     }
 
 
@@ -72,13 +51,13 @@ def currency_type(string):
     """represents currency type for correct input check.
         if passed argumunet is a available symbol, replaces it by code
     """
-    if is_available_code(string):
+    if is_available_code(string):   # if is available code return it
        return string
     else:
-        if is_available_symbol(string):
+        if is_available_symbol(string):  # if is in available symbols return symbols code
            return retrieve_symb_code(string)
-        else:
-           raise argparse.ArgumentTypeError("Unknown currency code/symbol")
+        else:                   
+           raise argparse.ArgumentTypeError("Unknown currency code/symbol") # unknown symbol/code raise error
 
 
 def convert(amount, in_curr, out_curr):
@@ -127,8 +106,8 @@ def main():
 
    
     
-    OUTPUT_DICT['input']['amount'] = args.amount  # assign amount value to output
-    OUTPUT_DICT['input']['currency'] = args.input_currency   # assign currency code to output
+    OUTPUT_DICT['input']['amount'] = args.amount    # assign amount value to output
+    OUTPUT_DICT['input']['currency'] = args.input_currency  # assign currency code to output
     # convert 
     convert(args.amount, args.input_currency, args.output_currency)
     # print output
