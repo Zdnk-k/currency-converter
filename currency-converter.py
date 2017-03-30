@@ -51,8 +51,8 @@ def currency_type(string):
     """represents currency type for correct input check.
         if passed argumunet is a available symbol, replaces it by code
     """
-    if is_available_code(string):   # if is available code return it
-       return string
+    if is_available_code(string.upper()):   # if is available code return it
+       return string.upper()
     else:
         if is_available_symbol(string):  # if is in available symbols return symbols code
            return retrieve_symb_code(string)
